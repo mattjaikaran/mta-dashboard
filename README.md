@@ -14,7 +14,8 @@ Rebuilt front end with React and Material-UI
 
 Rebuilding own API that will <br>
 -Pull API data for subway and nearby buses <br>
--connect with IoT <br>
+-Quick ETA for popular stops IE Union Square/Delancey Street
+-connect with IoT devices/projects around my apartment <br>
 -Built with NodeJS or Golang<br>
 <br>
 -Possibly Microsoft Fluid framework for lists for chores/items to buy<br>
