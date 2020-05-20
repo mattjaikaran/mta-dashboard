@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Alert from '@material-ui/lab/Alert'
 import { useInterval } from '../hooks/useInterval'
+import Delay from './Delay'
 const LTrainImg = require('../assets/L.svg')
 
 const useStyles = makeStyles({
@@ -34,14 +35,18 @@ const useStyles = makeStyles({
   },
   trainTime: {
     listStyleType: 'none',
+    '&:last-child': {
+      border: 'none'
+    }
   },
   text: {
     marginTop: '1em',
     fontSize: '22px'
   },
   errorMessage: {
-    marginTop: '10px',
-    textAlign: 'center'
+    textAlign: 'center',
+    borderTop: 'none',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
   }
 })
 
@@ -65,6 +70,7 @@ const staticData = {
 const Subway = (props) => {
   const [subwayData, setSubwayData] = useState(null)
   const [error, setError] = useState(false)
+  const [delay, setDelay] = useState(false)
   const { station, direction } = props
   const classes = useStyles()
 
@@ -129,10 +135,13 @@ const Subway = (props) => {
           )}
           {error && (
             <Alert className={classes.errorMessage} severity="error">
-              Something went wrong.
+              API Error. Something went wrong.
             </Alert>
           )}
         </ul>
+        {!delay ? (
+          <Delay message={`Sick Passenger at Bedford Ave. Expect delays.`} /> 
+        ) : null} 
       </Paper>
     </Grid>
   )

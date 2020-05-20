@@ -6,16 +6,18 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
   root: {
-    padding: '15px',
+    padding: '0 15px',
+    width: '100%',
     margin: '0 auto',
     textAlign: 'center'
   },
 })
 
 function App() {
+  const classes = useStyles()
   return (
     <Grid 
-      className="App" 
+      className={`${classes.root} App`} 
       container 
       spacing={2}>
       <Subway
