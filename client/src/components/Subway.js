@@ -17,7 +17,6 @@ const useStyles = makeStyles({
     color: 'white'
   },
   titleWrapper: {
-    // backgroundColor: '#218c74',
     paddingTop: '0.75em',
     paddingBottom: '1em',
     fontWeight: 300,
@@ -139,7 +138,7 @@ const Subway = (props) => {
             </Alert>
           )}
         </ul>
-        {!delay ? (
+        {delay ? (
           <Delay message={`Sick Passenger at Bedford Ave. Expect delays.`} /> 
         ) : null} 
       </Paper>
