@@ -4,7 +4,10 @@ React NodeJS application pulling MTA subway data.
 
 NodeJS API built by - https://github.com/edwarddistel/mta-subway-countdown-clock
 
-Rebuilt front end with React and Material-UI
+Rebuilt front end with <br>
+-React <br>
+-Material-UI <br>
+-FlatUI Colors (Spanish Palette)
 
 ## Info
 

@@ -11,24 +11,33 @@ const LTrainImg = require('../assets/L.svg')
 const useStyles = makeStyles({
   root: {
     marginTop: '1em',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: '#218c74',
+    color: 'white'
   },
-  title: {
-    paddingTop: '1em'
+  titleWrapper: {
+    // backgroundColor: '#218c74',
+    paddingTop: '0.75em',
+    paddingBottom: '1em',
+    fontWeight: 300,
+    borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
   },
   trainImg: {
-    maxWidth: '50px'
+    maxWidth: '40px',
+    margin: '1em 0'
   },
   list: {
-    marginTop: '1em',
     display: 'inline'
   },
   loading: {
-    margin: '1em 0'
+    margin: '1em 0',
   },
   trainTime: {
     listStyleType: 'none',
-    margin: '10px 0',
+  },
+  text: {
+    marginTop: '1em',
+    fontSize: '22px'
   },
   errorMessage: {
     marginTop: '10px',
@@ -56,59 +65,40 @@ const staticData = {
 const Subway = (props) => {
   const [subwayData, setSubwayData] = useState(null)
   const [error, setError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const { station, direction } = props
   const classes = useStyles()
 
-  useEffect(() => {
-    const getData = async () => {
-      setError(false)
-      try {
-        // using static data to not kill API requests
-        // const response = await axios.get('http://localhost:4000')
-        const response = staticData
-        console.log(response.data)
-        setSubwayData(response.data.stations.L11N.trains)
-        console.log(subwayData)
-      } catch (err) {
-        console.log(err)
-        return setError(true)
-      }
+  const getData = async () => {
+    setError(false)
+    try {
+      // using static data to not kill API requests
+      // const response = await axios.get('http://localhost:4000')
+      const response = staticData
+      console.log(response.data)
+      setSubwayData(response.data.stations.L11N.trains)
+      console.log(subwayData)
+    } catch (err) {
+      console.log(err)
+      return setError(true)
     }
+  }
+
+  useEffect(() => {
     getData()
   }, [])
 
   useInterval(() => {
-    const getData = async () => {
-      setError(false)
-      try {
-        // using static data to not kill API requests
-        // const response = await axios.get('http://localhost:4000')
-        const response = staticData
-        console.log(response.data)
-        // setSubwayData(response.data.stations.L11N.trains)
-        setSubwayData(response.data.stations.L11N.trains)
-        console.log(subwayData)
-      } catch (err) {
-        console.log(err)
-        return setError(true)
-      }
-    }
     getData()
   }, 60000)
 
   return (
-    <Grid 
-      item 
-      className={classes.root} 
-      xs={12} 
-      sm={6}>
-      <Paper>
-        <h5 className={classes.title}>{station} - {direction}</h5>
+    <Grid item xs={12} sm={6}>
+      <Paper className={classes.root}>
+        <div className={classes.titleWrapper}>
+          <h2 className={classes.title}>{station} - {direction}</h2>
+        </div>
         <div className={classes.imgWrapper}>
-          <img
-            className={classes.trainImg}
-            src={LTrainImg} />
+          
         </div>
         <ul className={classes.list}>
           {subwayData ? subwayData.map((train, i) => {
@@ -119,12 +109,14 @@ const Subway = (props) => {
                 <li className={classes.trainTime}>
                   <Grid container>
                     <Grid item xs={4}>
-                      Train {i + 1}
+                      <img
+                        className={classes.trainImg}
+                        src={LTrainImg} />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid className={classes.text} item xs={4}>
                       {eta}
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid className={classes.text} item xs={4}>
                       {minAway}
                     </Grid>
                   </Grid>
