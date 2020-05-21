@@ -3,9 +3,6 @@ import axios from 'axios'
 import { useInterval } from '../hooks/useInterval'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
-
-
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null)
@@ -19,15 +16,30 @@ exclude=minutely&appid=${API_KEY}`
   useEffect(() => {
     renderWeather()
   }, [])
-  // useInterval(() => {
-  //   renderWeather()
-  // }, 3600000)
+  useInterval(() => {
+    renderWeather()
+  }, 3600000)
 
   const renderTime = (unix, format) => {
     let timestamp = unix
-    const day = new Date(timestamp * 1000).toLocaleDateString()
-    const time = new Date(timestamp * 1000).toLocaleTimeString()
+    const day = new Date(timestamp * 1000)
+      .toLocaleDateString()
+      .substring(0, 4)
+    const time = new Date(timestamp * 1000)
+      .toLocaleTimeString()
     return format === 'time' ? time : day
+  }
+
+  const hourlyArgs = ['Hour', 'Temp', 'Feels Like', 'Weather']
+  const sevenDayArgs = ['Day', 'Temp', 'Feels Like', 'Weather']
+  const renderWeatherHeaders = (args) => {
+    return args.map((arg, i) => {
+      return (
+        <Grid key={i} className="header" item xs={3}>
+          <h5>{arg}</h5>
+        </Grid>
+      )
+    })
   }
 
   const renderWeather = async () => {
@@ -51,10 +63,10 @@ exclude=minutely&appid=${API_KEY}`
             {renderTime(hour.dt, 'time')}
           </Grid>
           <Grid item xs={3}>
-            {hour.temp}
+            {Math.round(hour.temp)}&deg;
           </Grid>
           <Grid item xs={3}>
-            {hour.feels_like}
+            {Math.round(hour.feels_like)}&deg;
           </Grid>
           <Grid item xs={3}>
             {hour.weather[0].main}
@@ -74,31 +86,31 @@ exclude=minutely&appid=${API_KEY}`
               {renderTime(day.dt, 'day')}
             </Grid>
             <Grid item xs={3}>
-              {day.temp.min} | {' '}
-              {day.temp.max}
+              {day.temp.min}&deg; | {' '}
+              {day.temp.max}&deg;
             </Grid>
             <Grid item xs={3}>
-              {day.feels_like.morn} | {' '}
-              {day.feels_like.night}
+              {day.feels_like.morn}&deg; | {' '}
+              {day.feels_like.night}&deg;
             </Grid>
             <Grid item xs={3}>
-              {day.weather[0].main}
+              {
+              day.weather[0].main === 'Rain' ||
+              day.weather[0].main === 'Thunderstorm' ||
+              day.weather[0].main === 'Snow' ? (
+                <>
+                  <strong>{day.weather[0].main}</strong>
+                  {/* <img 
+                    className="icon"
+                    src=""
+                    alt="icon" /> */}
+                </>
+              ) : day.weather[0].main
+              }
             </Grid>
           </Fragment>
         )
       })
-  }
-
-  const hourlyArgs = ['Hour', 'Temp', 'Feels Like', 'Weather']
-  const sevenDayArgs = ['Day', 'Temp', 'Feels Like', 'Weather']
-  const renderWeatherHeaders = (args) => {
-    return args.map((arg, i) => {
-      return (
-        <Grid className="header" item xs={3}>
-          <h5>{arg}</h5>
-        </Grid>
-      )
-    })
   }
 
   return (
