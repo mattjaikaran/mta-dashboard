@@ -89,6 +89,18 @@ exclude=minutely&appid=${API_KEY}`
       })
   }
 
+  const hourlyArgs = ['Hour', 'Temp', 'Feels Like', 'Weather']
+  const sevenDayArgs = ['Day', 'Temp', 'Feels Like', 'Weather']
+  const renderWeatherHeaders = (args) => {
+    return args.map((arg, i) => {
+      return (
+        <Grid className="header" item xs={3}>
+          <h5>{arg}</h5>
+        </Grid>
+      )
+    })
+  }
+
   return (
     <Grid item xs={12}>
       <Paper>
@@ -103,12 +115,18 @@ exclude=minutely&appid=${API_KEY}`
         <Grid container>
           <Grid item xs={12} sm={6} className="hourly">
             <h3>Hourly</h3>
+            <Grid container>
+              {renderWeatherHeaders(hourlyArgs)}
+            </Grid>
             <Grid container spacing={2}>
               {weatherData && renderHourly(weatherData.hourly)}
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} className="sevenDay">
             <h3>7 Day</h3>
+            <Grid container>
+              {renderWeatherHeaders(sevenDayArgs)}
+            </Grid>
             <Grid container spacing={2}>
               {weatherData && renderSevenDay(weatherData.daily)}
             </Grid>
