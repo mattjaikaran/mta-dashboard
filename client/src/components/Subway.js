@@ -96,21 +96,19 @@ const Subway = (props) => {
     getData()
   }, 60000)
 
+
   return (
-    <Grid item xs={12} sm={6}>
+    <Grid item sm={12} md={6}>
       <Paper className={classes.root}>
         <div className={classes.titleWrapper}>
           <h2 className={classes.title}>{station} - {direction}</h2>
-        </div>
-        <div className={classes.imgWrapper}>
-          
         </div>
         <ul className={classes.list}>
           {subwayData ? subwayData.map((train, i) => {
             console.log(train)
             const { eta, minAway } = train
             return (
-              <>
+              <div key={i}>
                 <li className={classes.trainTime}>
                   <Grid container>
                     <Grid item xs={4}>
@@ -127,7 +125,7 @@ const Subway = (props) => {
                   </Grid>
                 </li>
                 <Divider />
-              </>
+              </div>
             )
           }) : (
             <div className={classes.loading}>Loading...</div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import Subway from '../components/Subway'
+import Weather from '../components/Weather'
 
 const Dashboard = () => {
   return (
@@ -8,8 +9,9 @@ const Dashboard = () => {
         station="Graham Ave"
         direction="Manhattan Bound" />
       <Subway
-        station="Graham Ave"
-        direction="Canarsie Bound" />
+        station="Popular Spots"
+        direction="ETA" />
+      <Weather />
     </>
   )
 }
