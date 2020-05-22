@@ -31,7 +31,7 @@ exclude=minutely&appid=${API_KEY}`
   }
 
   const hourlyArgs = ['Hour', 'Temp', 'Feels Like', 'Weather']
-  const sevenDayArgs = ['Day', 'Temp', 'Feels Like', 'Weather']
+  const sevenDayArgs = ['Day', 'Temp (Hi-Low)', 'Feels Like', 'Weather']
   const renderWeatherHeaders = (args) => {
     return args.map((arg, i) => {
       return (
@@ -86,12 +86,12 @@ exclude=minutely&appid=${API_KEY}`
               {renderTime(day.dt, 'day')}
             </Grid>
             <Grid item xs={3}>
-              {day.temp.min}&deg; | {' '}
-              {day.temp.max}&deg;
+              {Math.round(day.temp.max)}&deg; | {' '}
+              {Math.round(day.temp.min)}&deg;
             </Grid>
             <Grid item xs={3}>
-              {day.feels_like.morn}&deg; | {' '}
-              {day.feels_like.night}&deg;
+              {Math.round(day.feels_like.night)}&deg; | {' '}
+              {Math.round(day.feels_like.morn)}&deg;
             </Grid>
             <Grid item xs={3}>
               {
@@ -119,9 +119,12 @@ exclude=minutely&appid=${API_KEY}`
         <h3>Weather</h3>
         {weatherData &&
           <p>
-            Currently: {weatherData.current.temp} <br />
-            Feels like: {weatherData.current.feels_like} <br />
-            Weather: {weatherData.current.weather[0].main}
+            Currently: 
+            {Math.round(weatherData.current.temp)}&deg; <br />
+            Feels like: 
+            {Math.round(weatherData.current.feels_like)}&deg; <br />
+            Weather: 
+            {weatherData.current.weather[0].main}
           </p>
         }
         <Grid container>
