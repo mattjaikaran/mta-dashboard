@@ -8,9 +8,6 @@ const Dashboard = () => {
       <Subway
         station="Graham Ave"
         direction="Manhattan Bound" />
-      {/* <Subway
-        station="Popular Spots"
-        direction="ETA" /> */}
       <Weather />
     </>
   )
