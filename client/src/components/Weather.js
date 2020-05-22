@@ -5,12 +5,29 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import cloudy from '../assets/cloudy.svg'
+import moon from '../assets/moon.svg'
+import snow from '../assets/snow.svg'
+import thunderstorm from '../assets/thunderstorm.svg'
+import sunny from '../assets/sunny.svg'
 
-
+const useStyles = makeStyles({
+  root: {
+    padding: '20px',
+  },
+  title: {
+    paddingTop: '1em'
+  },
+  weatherIcon: {
+    maxWidth: '50px',
+    marginTop: '1em'
+  },
+})
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null)
   const [error, setError] = useState(null)
+  const [currentWeatherIconImg, setCurrentWeatherIconImg] = useState(null)
+  const classes = useStyles()
   const lat = 40.7143
   const lon = -74.006
   const API_KEY = process.env.REACT_APP_WEATHER_API_KEY
@@ -35,7 +52,6 @@ exclude=minutely&appid=${API_KEY}`
   }
 
   const hourlyArgs = ['Hour', 'Temp', 'Feels Like', 'Weather']
-  const sevenDayArgs = ['Day', 'Temp (Hi-Low)', 'Feels Like', 'Weather']
   const renderWeatherHeaders = (args) => {
     return args.map((arg, i) => {
       return (
@@ -46,11 +62,30 @@ exclude=minutely&appid=${API_KEY}`
     })
   }
 
+  const renderWeatherImg = (weather) => {
+    if (weather === 'Clouds' || weather === 'Cloudy') {
+      setCurrentWeatherIconImg(cloudy)
+    }
+    if (weather === 'Snow' || weather === 'Snow Showers') {
+      setCurrentWeatherIconImg(snow)
+    }
+    if (weather === 'Clear' || weather === 'Sunny') {
+      setCurrentWeatherIconImg(sunny)
+    }
+    if (weather === 'Rain' || 
+    weather === 'Thunderstorms' ||
+    weather === 'Showers') {
+      setCurrentWeatherIconImg(thunderstorm)
+    }
+    console.log(weather)
+  }
+
   const renderWeather = async () => {
     try {
       const response = await axios.get(weatherURL)
       console.log(response.data)
       setWeatherData(response.data)
+      renderWeatherImg(response.data.current.weather[0].main)
     } catch (err) {
       console.log(err)
       setError(err.message)
@@ -80,79 +115,44 @@ exclude=minutely&appid=${API_KEY}`
     })
   }
 
-  const renderSevenDay = (data) => {
-    return data
-      .filter((day, i) => i < 7)
-      .map(day => {
-        return (
-          <Fragment key={day.dt}>
-            <Grid item xs={3}>
-              {renderTime(day.dt, 'day')}
-            </Grid>
-            <Grid item xs={3}>
-              {Math.round(day.temp.max)}&deg; | {' '}
-              {Math.round(day.temp.min)}&deg;
-            </Grid>
-            <Grid item xs={3}>
-              {Math.round(day.feels_like.night)}&deg; | {' '}
-              {Math.round(day.feels_like.morn)}&deg;
-            </Grid>
-            <Grid item xs={3}>
-              {
-                day.weather[0].main === 'Rain' ||
-                day.weather[0].main === 'Thunderstorm' ||
-                day.weather[0].main === 'Snow' ? (
-                  <>
-                    <strong>{day.weather[0].main}</strong>
-                    {/* <img 
-                      className="icon"
-                      src={cloudy}
-                      alt="icon" /> */}
-                  </>
-                ) : day.weather[0].main
-              }
-            </Grid>
-          </Fragment>
-        )
-      })
-  }
-
   return (
     <Grid 
       item 
-      xs={12}>
+      className={classes.root}
+      sm={12} 
+      md={6}>
       <Paper>
-        <h3>Weather</h3>
-        {weatherData &&
-          <p>
-            Currently: {' '}
-            {Math.round(weatherData.current.temp)}&deg; ||
-            Feels like: {' '}
-            {Math.round(weatherData.current.feels_like)}&deg; ||
-            Weather: {' '}
-            {weatherData.current.weather[0].main}
-            <hr />
-          </p>
-        }
+        <h2 className={classes.title}>Weather</h2>
+        <Grid container spacing={2}>
+          {weatherData &&
+            <>
+              <Grid item xs={6}>
+                Currently:
+                <h3>
+                  {Math.round(weatherData.current.temp)}&deg;
+                </h3> 
+                Feels Like: {' '}
+                <h3>
+                  {Math.round(weatherData.current.feels_like)}&deg;
+                </h3>
+              </Grid>
+              <Grid item xs={6}>
+                Weather:
+                <h3>{weatherData.current.weather[0].main}</h3>
+                <img
+                  src={currentWeatherIconImg}
+                  className={classes.weatherIcon}
+                  alt="weather-icon" />
+              </Grid>
+            </>
+          }
+        </Grid>
+        <h3>Hourly</h3>
         <Grid container>
-          <Grid item xs={12} sm={6} className="hourly">
-            <h3>Hourly</h3>
-            <Grid container>
-              {renderWeatherHeaders(hourlyArgs)}
-            </Grid>
-            <Grid container spacing={2}>
-              {weatherData && renderHourly(weatherData.hourly)}
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6} className="sevenDay">
-            <h3>7 Day</h3>
-            <Grid container>
-              {renderWeatherHeaders(sevenDayArgs)}
-            </Grid>
-            <Grid container spacing={2}>
-              {weatherData && renderSevenDay(weatherData.daily)}
-            </Grid>
-          </Grid>
+          {renderWeatherHeaders(hourlyArgs)}
+        </Grid>
+        <Grid container spacing={2}>
+          {weatherData && renderHourly(weatherData.hourly)}
         </Grid>
       </Paper>
     </Grid>
