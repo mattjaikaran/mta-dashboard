@@ -4,22 +4,33 @@ import { useInterval } from '../hooks/useInterval'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import cloudy from '../assets/cloudy.svg'
-import moon from '../assets/moon.svg'
-import snow from '../assets/snow.svg'
-import thunderstorm from '../assets/thunderstorm.svg'
-import sunny from '../assets/sunny.svg'
+import cloudy from '../assets/cloudy-white.svg'
+import moon from '../assets/moon-white.svg'
+import snow from '../assets/snow-white.svg'
+import thunderstorm from '../assets/thunderstorm-white.svg'
+import sunny from '../assets/sunny-white.svg'
 
 const useStyles = makeStyles({
   root: {
-    padding: '20px',
+    padding: '1em',
   },
-  title: {
-    paddingTop: '1em'
+  bg: {
+    backgroundColor: '#227093',
+    color: 'white',
+    paddingTop: '2em',
+    marginTop: '1em'
+  },
+  weather: {
+    textAlign: 'center'
+  },
+  hourlyTitle: {
+    fontWeight: 300,
+    marginTop: '2em',
+    marginBottom: 0
   },
   weatherIcon: {
-    maxWidth: '50px',
-    marginTop: '1em'
+    maxWidth: '100px',
+    fill: 'white'
   },
 })
 
@@ -94,7 +105,7 @@ exclude=minutely&appid=${API_KEY}`
 
   const renderHourly = (data) => {
     return data
-      .filter((hour, i) => i < 7)
+      .filter((hour, i) => i < 5)
       .map(hour => {
       return (
         <Fragment key={hour.dt}>
@@ -121,8 +132,8 @@ exclude=minutely&appid=${API_KEY}`
       className={classes.root}
       sm={12} 
       md={6}>
-      <Paper>
-        <h2 className={classes.title}>Weather</h2>
+      <Paper className={classes.bg}>
+        {/* <h2 className={classes.title}>Weather</h2> */}
         <Grid container spacing={2}>
           {weatherData &&
             <>
@@ -137,17 +148,19 @@ exclude=minutely&appid=${API_KEY}`
                 </h3>
               </Grid>
               <Grid item xs={6}>
-                Weather:
-                <h3>{weatherData.current.weather[0].main}</h3>
-                <img
-                  src={currentWeatherIconImg}
-                  className={classes.weatherIcon}
-                  alt="weather-icon" />
+                <div className={classes.weather}>
+                  <h3>{weatherData.current.weather[0].main}</h3>
+                  <br />
+                  <img
+                    src={currentWeatherIconImg}
+                    className={classes.weatherIcon}
+                    alt="weather-icon" />
+                </div>
               </Grid>
             </>
           }
         </Grid>
-        <h3>Hourly</h3>
+        <h3 className={classes.hourlyTitle}>Hourly</h3>
         <Grid container>
           {renderWeatherHeaders(hourlyArgs)}
         </Grid>
